@@ -27,7 +27,7 @@ open class SimpleFractal(private val fragmentCode: String) : IFractal {
 
             -1.0f, 1.0f,   // top left
             1.0f, -1.0f,   // bottom right
-            1.0f, 1.0f,  // top right
+            1.0f, 1.0f,    // top right
         )
 
         val vertexCount: Int = triangleCoords.size / COORDS_PER_VERTEX
