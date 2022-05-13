@@ -29,7 +29,7 @@ float magnitude(vec2 v) {
 vec3 val_at(vec2 pos) {
     vec2 z = pos;
     for (int i = 0; i < ITERATIONS; i++) {
-        z = cmul(z, z) + vec2(uVar, uVar);
+        z = cmul(z, z) + vec2(cos(asin(uVar) * 3.0), uVar);
         if (magnitude(z) > 4.) {
             return vec3(sqrt(float(i + 1) - log(log(magnitude(z))) / log(2.)));
         }

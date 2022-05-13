@@ -6,20 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.Ponycorn.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.Ponycorn.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,7 +15,7 @@
             android:id="@+id/button_next"
             android:layout_width="88dp"
             android:layout_height="wrap_content"
-            android:text="Next"
+            android:text="@string/next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -37,12 +23,12 @@
             android:id="@+id/button_prev"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Prev"
+            android:text="@string/previous"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.yuraiz.ponycorn.render.FractalView
-            android:id="@+id/myGLSurfaceView2"
+            android:id="@+id/myGLSurfaceView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,6 +37,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
+
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/fractal_controls"
+            android:layout_width="0dp"
+            android:layout_height="222dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_prev"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:value="0.5"
+            android:valueFrom="0.0"
+            android:valueTo="1.0"  />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -13,9 +13,6 @@ out vec4 color;
 precision highp float;
 #define ITERATIONS 200
 
-float user_scale = 1.0;
-float canvas_resolution = 800.0;
-float center = 400.0;
 int steps = 100;
 
 vec2 cmul(vec2 a, vec2 b) {
@@ -29,7 +26,7 @@ float magnitude(vec2 v) {
 vec3 val_at(vec2 pos) {
     vec2 z = pos;
     for (int i = 0; i < ITERATIONS; i++) {
-        z = cmul(z, z) + vec2(0.5, uVar);
+        z = cmul(z, z) + vec2(uVar, 0.5);
         if (magnitude(z) > 4.) {
             return vec3(sqrt(float(i + 1) - log(log(magnitude(z))) / log(2.)));
         }
@@ -45,7 +42,6 @@ void main()
     uv += uCenter;
 
     vec3 calculated = val_at(uv);
-    //vec3 calculated = val_at((gl_FragCoord.xy / canvas_resolution - 0.5) * user_scale + center);
 
     color = vec4(sin(calculated * 0.5 + float(steps) * 0.01) / 2. + 0.5, 1.0);
 }

@@ -1,30 +1,59 @@
 package com.yuraiz.ponycorn.render
 
-import android.opengl.GLES20
+import android.view.View
+import com.yuraiz.ponycorn.fractal.VariableFractal
 import com.yuraiz.ponycorn.fractal.IFractal
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class MultiFractalRenerer(vararg fractals: IFractal) : MyGLRenderer(fractals.first()) {
+/**
+ * [FractalRenderer] that support switching between multiple fractals
+ *
+ * for switching use [prevFractal] and [nextFractal] methods
+ */
+class MultiFractalRenderer(vararg fractals: IFractal) : FractalRenderer(fractals.first()) {
     private val fractals = arrayListOf(*fractals)
+
+    init {
+        current %= fractals.count()
+        fractal = fractals[current]
+    }
+
+    companion object {
+        private var current = 0
+
+        lateinit var slider_hide: () -> Unit
+        lateinit var slider_show: () -> Unit
+
+        lateinit var slider_visibiliry: (Int) -> Unit
+    }
+
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
-        GLES20.glClearColor(0.5f, 0.0f, 0.0f, 1.0f)
         for (fractal in fractals) {
             fractal.onSurfaceCreated()
         }
     }
 
-    private var current = 0
+    fun change_slider() {
+        if(fractal is VariableFractal)
+            slider_visibiliry(View.VISIBLE)
+        else
+            slider_visibiliry(View.INVISIBLE)
+    }
 
     fun prevFractal() {
         if (--current == -1)
             current = fractals.count() - 1
         fractal = fractals[current]
+        change_slider()
+        reset()
     }
 
     fun nextFractal() {
-        if (++current == fractals.count())
-            current = 0
+        current++
+        current %= fractals.count()
         fractal = fractals[current]
+        change_slider()
+        reset()
     }
 }

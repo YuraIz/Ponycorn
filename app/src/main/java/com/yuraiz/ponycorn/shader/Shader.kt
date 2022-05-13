@@ -1,32 +1,39 @@
-package com.yuraiz.ponycorn.Shader
+package com.yuraiz.ponycorn.shader
 
-import android.opengl.GLES20
+import android.opengl.GLES20.*
+import android.util.Log
 import java.nio.IntBuffer
 
+/**
+ * Wrapper over OpenGL shader
+ *
+ * **WARNING**: Construct only in OpenGL context
+ */
 class Shader(vertexCode: String, fragmentCode: String) {
     private val program = linkProgram(compileVertex(vertexCode), compileFragment(fragmentCode))
 
-    fun use() = GLES20.glUseProgram(program)
+    fun use() = glUseProgram(program)
 
-    fun attribLocation(attrib: String) = GLES20.glGetAttribLocation(program, attrib)
+    fun attribLocation(attrib: String) = glGetAttribLocation(program, attrib)
 
-    fun uniformLocation(attrib: String) = GLES20.glGetUniformLocation(program, attrib)
+    fun uniformLocation(attrib: String) = glGetUniformLocation(program, attrib)
 
     private fun checkCompileStatus(shader: Int, name: String) {
         val success = IntBuffer.allocate(1)
-        GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, success)
+        glGetShaderiv(shader, GL_COMPILE_STATUS, success)
         if (success[0] == 0) {
-            print("$name shader compile error")
-            val infoLog = GLES20.glGetShaderInfoLog(shader)
-            println("Log: $infoLog")
+            Log.e(
+                "SHADER COMPILE ERROR",
+                glGetShaderInfoLog(shader)
+            )
         }
     }
 
     private fun compileVertex(vertexCode: String): Int {
-        val vertex = GLES20.glCreateShader(GLES20.GL_VERTEX_SHADER)
+        val vertex = glCreateShader(GL_VERTEX_SHADER)
 
-        GLES20.glShaderSource(vertex, vertexCode)
-        GLES20.glCompileShader(vertex)
+        glShaderSource(vertex, vertexCode)
+        glCompileShader(vertex)
 
         checkCompileStatus(vertex, "Vertex")
 
@@ -34,11 +41,10 @@ class Shader(vertexCode: String, fragmentCode: String) {
     }
 
     private fun compileFragment(fragmentCode: String): Int {
+        val fragment = glCreateShader(GL_FRAGMENT_SHADER)
 
-        val fragment = GLES20.glCreateShader(GLES20.GL_FRAGMENT_SHADER)
-
-        GLES20.glShaderSource(fragment, fragmentCode)
-        GLES20.glCompileShader(fragment)
+        glShaderSource(fragment, fragmentCode)
+        glCompileShader(fragment)
 
         checkCompileStatus(fragment, "Fragment")
 
@@ -46,22 +52,23 @@ class Shader(vertexCode: String, fragmentCode: String) {
     }
 
     private fun linkProgram(vararg shaders: Int): Int {
-        val program = GLES20.glCreateProgram()
+        val program = glCreateProgram()
         for (shader in shaders) {
-            GLES20.glAttachShader(program, shader)
+            glAttachShader(program, shader)
         }
-        GLES20.glLinkProgram(program)
+        glLinkProgram(program)
 
         val success = IntBuffer.allocate(1)
-        GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, success)
+        glGetProgramiv(program, GL_LINK_STATUS, success)
         if (success[0] == 0) {
-            print("Link program error")
-            val infoLog = GLES20.glGetProgramInfoLog(program)
-            println("Log: $infoLog")
+            Log.e(
+                "PROGRAM LINK ERROR",
+                glGetProgramInfoLog(program)
+            )
         }
 
         for (shader in shaders) {
-            GLES20.glDeleteShader(shader)
+            glDeleteShader(shader)
         }
         return program
     }

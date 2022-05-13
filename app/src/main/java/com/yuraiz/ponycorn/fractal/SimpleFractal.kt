@@ -15,7 +15,7 @@ import java.nio.FloatBuffer
  * uniform vec2 uCenter;
  * ```
  */
-open class MyFractal(private val fragmentCode: String) : IFractal {
+open class SimpleFractal(private val fragmentCode: String) : IFractal {
 
     protected companion object {
         // number of coordinates per vertex in this array

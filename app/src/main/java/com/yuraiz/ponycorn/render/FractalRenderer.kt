@@ -7,7 +7,10 @@ import com.yuraiz.ponycorn.fractal.IFractal
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-open class MyGLRenderer(var fractal: IFractal) : GLSurfaceView.Renderer {
+/**
+ * GL Renderer that can render fractal
+ */
+open class FractalRenderer(var fractal: IFractal) : GLSurfaceView.Renderer {
     companion object {
         var scale = 2.5f
             set(value) {
